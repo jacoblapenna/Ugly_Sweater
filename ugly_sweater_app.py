@@ -78,9 +78,6 @@ def control_red():
         # if state is off but pin is high
         elif GPIO.input(pin) == 1 and b == 0:
             GPIO.output(pin, 0) # turn off
-        # in all other cases
-        else:
-            pass
         color = red # hold and look for state change
         f = color['freq']
         b = color['state']
