@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <!-- the title the browser sees -->
+  <title>Control Jacob's Ugly Sweater</title>
+
+  <!-- tell browser where to find page styling -->
+  <link rel="stylesheet"
+    type="text/css"
+    href="{{ url_for('static', filename='css/style.css') }}">
+
+  <!-- tell browser where to find favicon
+  (the litel image in the browser tab) -->
+  <link rel="icon"
+		href="{{ url_for('static', filename='im/ugly_sweater.ico') }}">
+
+  <!-- tell browser where to find js support code (must be stored locally
+  if on  LAN without internet, otherwise provide href to js support code
+  on internet)-->
+  <script src="{{ url_for('static', filename='js/jquery-3.3.1.js') }}">
+  </script>
+
+  <!-- same as above but for js socket protocol -->
+  <script src="{{ url_for('static', filename='js/socket.io.js') }}">
+  </script>
+
+</head>
+<body>
+
+  <div id="headlines">
+
+    <h1>Welcome to Jacob's sweater HMI</h1>
+    <h2>control its lights by tapping buttons below...</h2>
+
+  </div>
+
+  <hr id="hor_rule">
+
+  <div id="button_container">
+
+    <div id="red_btn_div" class="button_div">
+      <!-- update inside html with js based on client input -->
+    </div>
+
+    <div id="green_btn_div" class="button_div">
+      <!-- <button type="button" id="green"></button> -->
+    </div>
+
+    <div id="blue_btn_div" class="button_div">
+      <!-- <button type="button" id="blue"></button> -->
+    </div>
+
+    <div id="white_btn_div" class="button_div">
+      <!-- <button type="button" id="white"></button> -->
+    </div>
+
+  </div>
+
+  <script>
+
+    // get instance of socket
+    var socket =  io.connect(location.origin);
+
+    // set the top of the button container to be just below the hr element
+    // first, get the hr elements position
+    var hr_y = document.getElementById("hor_rule").getBoundingClientRect().y;
+    // then, set the top of the div 5 px below the hr element
+    document.getElementById("button_container").style.top =
+      (hr_y + 5).toString() + "px";
+
+    // get the final postion and size of the button container
+    var bc_position =
+      document.getElementById("button_container").getBoundingClientRect();
+
+    // using the button container's size and position
+    // to set the button div positions
+    var button_div_height = bc_position.height / 4;
+    $(".button_div").each(function(idx, obj) {
+      obj.style.height = (button_div_height - 3).toString() + "px";
+    });
+
+    // put a button or slider in each div based on state in python
+    // query python and get state on client connect
+    // change button to slider or slider to button based on python state update
+
+    // red
+    socket.on("red_init_state", function(json) {
+
+      // if light already on at connect, render a slider
+      if (json.state) {
+        create_slider(0, 0, json.freq);
+      }
+      // otherwise, if light is off, render a button
+      else {
+        create_button(0);
+      }
+
+    });
+
+    // green
+    socket.on("green_init_state", function(json) {
+
+      // if light already on at connect, render a slider
+      if (json.state) {
+        create_slider(1, 0, json.freq);
+      }
+      // otherwise, if light is off, render a button
+      else {
+        create_button(1);
+      }
+
+    });
+
+    // blue
+    socket.on("blue_init_state", function(json) {
+
+      // if light already on at connect, render a slider
+      if (json.state) {
+        create_slider(2, 0, json.freq);
+      }
+      // otherwise, if light is off, render a button
+      else {
+        create_button(2);
+      }
+
+    });
+
+    // white
+    socket.on("white_init_state", function(json) {
+
+      // if light already on at connect, render a slider
+      if (json.state) {
+        create_slider(3, 0, json.freq);
+      }
+      // otherwise, if light is off, render a button
+      else {
+        create_button(3);
+      }
+
+    });
+
+    function int_to_color_string(int) {
+
+      // decode int to color
+      if (int == 0) {
+        return 'red';
+      } else if (int == 1) {
+        return 'green';
+      } else if (int == 2) {
+        return 'blue';
+      } else if (int == 3) {
+        return 'white';
+      }
+
+    }
+
+    function color_string_to_int(color) {
+
+      // decode color string to int
+      if (color == 'red') {
+        return '0';
+      } else if (color == 'green') {
+        return '1';
+      } else if (color == 'blue') {
+        return '2';
+      } else if (color == 'white') {
+        return '3';
+      }
+
+    }
+
+    function build_button_html_string(color) {
+
+      // decode color string input argument
+      var int = color_string_to_int(color);
+
+      // create string on which to build
+      var str = '';
+
+      // build button html string
+      str += '<button '; // create button
+      // define next click action
+      str += 'onclick="create_slider(' + int + ', 1)" ';
+      str += 'id="' + color + '_btn">'; // define button's id
+      str += color.toUpperCase(); // put text in button
+      str += '</button>'; // close button tag
+
+      // return string
+      return str;
+
+    }
+
+    function create_button(int) {
+
+      // decode color int input argument
+      var color = int_to_color_string(int);
+
+      // build necassary strings
+      var btn_div_id = color + '_btn_div';
+
+      // build button and update html
+      document.getElementById(btn_div_id).innerHTML =
+        build_button_html_string(color);
+
+    }
+
+    function build_slider_html_string(color, init, slide_id, text_id) {
+
+      // decode color string input argument
+      var int = color_string_to_int(color);
+
+      // create string on which to build
+      var str = '';
+
+      // build text display to show Hz to client
+      str += '<div id="' + text_id + '_div">'
+        // span will be updated with js based on slider position
+        str += '<p>' + color.toUpperCase() + ': ' // color label
+        str += '<span id="' + text_id + '">' + init + '</span> Hz</p>'
+      str += '</div>'
+
+      // start building string
+      str += '<div id="' + slide_id + '_div">'
+      str += '<input '; // slider is an input
+      str += 'type="range" '; // slide over a range
+      str += 'min="0" '; // minimum is 0 (off state)
+      str += 'max="30" '; // max is 30 Hz (solid on state)
+      str += 'value="' + init + '" '; // start at init
+      str += 'class="slider" '; // class to style all sliders at once
+      str += 'oninput="update_freq(' + int + ')"'; // update frequency
+      str += 'id="' + slide_id + '">'; // id to get slider values in js
+      str += '</div>'
+
+      // return string
+      return str;
+
+    }
+
+    function create_slider(int, btn_tap, init_freq=30) {
+
+      // decode color int input argument
+      var color = int_to_color_string(int);
+
+      // build necassary strings
+      var btn_div_id = color + '_btn_div';
+      var slider_id = color + '_slider';
+      var text_id = color + '_freq';
+      var txt_div_id = color + '_freq_div';
+
+      // declare necassary variables to initialize state
+      var init = init_freq.toString();
+
+      // build slider and update html
+      document.getElementById(btn_div_id).innerHTML =
+        build_slider_html_string(color, init, slider_id, text_id);
+
+      // style newly created slider and text content
+      $("#" + txt_div_id).css({
+        'text-align' : 'center',
+        'font-size' : '400%'
+      });
+
+      // if slider was built from initial button tap
+      // update python to change state of light to be solid on (30 Hz)
+      if (btn_tap) {
+        socket.emit("update_state", {
+          'color' : int,
+          'freq' : 30,
+          'btn_tap' : 1
+        });
+      }
+
+    }
+
+    function update_freq(int) {
+
+      // decode color int input argument
+      var color = int_to_color_string(int);
+
+      // build necassary strings
+      var text_id = color + '_freq';
+      var slider_id = color + '_slider';
+
+      // update frequency text
+      // get slider's present value
+      var slider_value = document.getElementById(slider_id).value;
+      // update html with present value
+      document.getElementById(text_id).innerHTML =
+        slider_value;
+
+      // send update to python server to control light
+      socket.emit("update_state", {
+        'color' : int,
+        'freq' : slider_value,
+        'btn_tap' : 0
+      });
+    }
+
+    // listen for change of state from other client through python
+    socket.on("change_of_state", function(json, btn_tap) {
+
+      // decode color int input argument
+      var int = json.color;
+      var state = json.state;
+      var color = int_to_color_string(int);
+
+      if (state & btn_tap){
+        create_slider(int, 0)
+      }
+      else if (state) {
+        var freq = json.freq;
+        document.getElementById(color + '_slider').value = freq;
+        document.getElementById(color + '_freq').innerHTML = freq;
+      }
+      else {
+        create_button(int)
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,96 @@
+body {
+  background-color: #ffeec7;
+  padding: 0px;
+}
+
+#headlines {
+  text-align: center;
+}
+
+hr {
+  width: 85%;
+  border-color: black;
+}
+
+#button_container {
+  position: absolute;
+  /* top set by js */
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+}
+
+.button_div {
+  /* height set by js */
+  left: 0px;
+  right: 0px;
+}
+
+/* button should change to slider if turned on, then to turn off, should slide
+down to zero, once off, the button reappears to turn light back on */
+
+button {
+  border-style: solid black;
+  border-radius: 20px;
+  position: relative;
+  width: 80%;
+  height: 80%;
+  top: 10%;
+  left: 10%;
+  font-size: 500%;
+}
+
+#red_btn {
+  background-color: #ff0000;
+}
+
+#green_btn {
+  background-color: #00ff00;
+}
+
+#blue_btn {
+  background-color: #0000ff;
+  color: white;
+}
+
+#white_btn {
+  background-color: #ffff00;
+}
+
+div {
+  border-style: solid;
+  border-color: #ffeec7;
+}
+
+/* The slider itself */
+.slider {
+  -webkit-appearance: none;
+  position: relative;
+  top: 25%;
+  left: 10%;
+  width: 80%;
+  height: 50px;
+  border-radius: 25px;
+  background: #d3d3d3;
+  outline: none;
+  -webkit-transition: .2s;
+  transition: opacity .2s;
+}
+
+/* the slider handle in chrome */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  background: #4CAF50;
+}
+
+/* the slider handle in firefox */
+.slider::-moz-range-thumb {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  background: #4CAF50;
+}
