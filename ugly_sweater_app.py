@@ -71,7 +71,7 @@ def control_red():
             GPIO.output(pin, 1) # turn on
             time.sleep(t) # hold on
             GPIO.output(pin, 0) # turn off
-            GPIO.sleep(t) # hold off
+            time.sleep(t) # hold off
         # if frequency is solid on but pin is low
         elif GPIO.input(pin) == 0 and f == 30:
             GPIO.output(pin, 1) # turn on
