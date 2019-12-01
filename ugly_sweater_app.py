@@ -69,11 +69,12 @@ def control_red():
         b = red['state']
         # if state is on and frequency is blinked
         if b == 1 and 0 < f < 30:
-            print('blink state') # debug
             t = (1 / f) / 2 # set sleep time
             GPIO.output(pin, 1) # turn on
+            print('on') # debug
             time.sleep(t) # hold on
             GPIO.output(pin, 0) # turn off
+            print('off') # debug
             time.sleep(t) # hold off
         # if frequency is solid on but pin is low
         elif GPIO.input(pin) == 0 and f == 30:
