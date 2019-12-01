@@ -80,9 +80,10 @@ def control_red():
             GPIO.output(pin, 0) # turn off
         # in all other cases
         else:
-            color = red # hold and look for state change
-            f = color['freq']
-            b = color['state']
+            pass
+        color = red # hold and look for state change
+        f = color['freq']
+        b = color['state']
 
 def control_green():
     # control green lights via pin 7 from dedicated thread
