@@ -59,12 +59,12 @@ def control_red():
     global red
 
     # declare needed local variables
-    color = red
-    f = color['freq']
-    b = color['state']
     pin = 5
 
     while True: # run as long as program is served
+        # look for state change
+        f = red['freq']
+        b = red['state']
         # if state is on and frequency is blinked
         if b == 1 and 0 < f < 30:
             t = (1 / f) / 2 # set sleep time
@@ -78,9 +78,6 @@ def control_red():
         # if state is off but pin is high
         elif GPIO.input(pin) == 1 and b == 0:
             GPIO.output(pin, 0) # turn off
-        color = red # hold and look for state change
-        f = color['freq']
-        b = color['state']
 
 def control_green():
     # control green lights via pin 7 from dedicated thread
