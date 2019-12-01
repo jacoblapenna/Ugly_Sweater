@@ -103,7 +103,7 @@ def process_state_update(json):
 if __name__ == '__main__':
 
     # set GPIO initial state on startup
-
+    set_gpio_on_startup()
 
     # set light states on server startup
     red = {'color' : 0, 'state' : 0, 'freq' : 0}
