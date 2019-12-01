@@ -61,13 +61,15 @@ def control_red():
     # declare needed local variables
     pin = 5
 
+    f_old = red['freq'] # debug
+
     while True: # run as long as program is served
         # look for state change
         f = red['freq']
         b = red['state']
         # if state is on and frequency is blinked
         if b == 1 and 0 < f < 30:
-            print('blink state')
+            print('blink state') # debug
             t = (1 / f) / 2 # set sleep time
             GPIO.output(pin, 1) # turn on
             time.sleep(t) # hold on
@@ -79,9 +81,9 @@ def control_red():
         # if state is off but pin is high
         elif GPIO.input(pin) == 1 and b == 0:
             GPIO.output(pin, 0) # turn off
-        if f_old != f:
-            print(f)
-        f_old = f
+        if f_old != f: # debug
+            print(f) # debug
+        f_old = f # debug
 
 
 def control_green():
