@@ -82,9 +82,9 @@ def control_red():
         #if f > 0:
         #    t = (1/f) / 2 # set sleep time
         GPIO.output(5, 1) # turn on
-        time.sleep(0.067) # hold on
+        time.sleep(1) # hold on
         GPIO.output(5, 0) # turn off
-        time.sleep(0.067) # hold off
+        time.sleep(1) # hold off
         #else: # frequency is zero, light should be off
         #    GPIO.output(pin, 0) # ensure off
 
