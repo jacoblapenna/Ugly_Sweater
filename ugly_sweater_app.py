@@ -77,16 +77,16 @@ def control_red():
 
     while True: # run as long as program is served
         # look for state change
-        f = red['freq']
+        #f = red['freq']
         # if frequency is non-zero light is on and blinked
-        if f > 0:
-            t = (1/f) / 2 # set sleep time
-            GPIO.output(5, 1) # turn on
-            time.sleep(t) # hold on
-            GPIO.output(5, 0) # turn off
-            time.sleep(t) # hold off
-        else: # frequency is zero, light should be off
-            GPIO.output(pin, 0) # ensure off
+        #if f > 0:
+        #    t = (1/f) / 2 # set sleep time
+        GPIO.output(5, 1) # turn on
+        time.sleep(0.067) # hold on
+        GPIO.output(5, 0) # turn off
+        time.sleep(0.067) # hold off
+        #else: # frequency is zero, light should be off
+        #    GPIO.output(pin, 0) # ensure off
 
 
 def control_green():
