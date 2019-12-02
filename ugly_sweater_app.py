@@ -135,15 +135,15 @@ def control_white():
 
     while True: # run as long as program is served
         # look for state change
-        f = white_f.value
+        #f = white_f.value
         # if frequency is non-zero light is on and blinked
-        if f > 0:
-            GPIO.output(pin, 1) # turn on
-            time.sleep(0.067) # hold on
-            GPIO.output(pin, 0) # turn off
-            time.sleep(0.067) # hold off
-        else: # frequency is zero, light should be off
-            GPIO.output(pin, 0) # ensure off
+        #if f > 0:
+        GPIO.output(pin, 1) # turn on
+        time.sleep(0.067) # hold on
+        GPIO.output(pin, 0) # turn off
+        time.sleep(0.067) # hold off
+        # else: # frequency is zero, light should be off
+        #     GPIO.output(pin, 0) # ensure off
 
 
 @app.route('/')
