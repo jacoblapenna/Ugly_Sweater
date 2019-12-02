@@ -72,15 +72,12 @@ def start_threads():
 def control_red():
     # control red lights via pin 5 from dedicated thread
 
-    # look at global state first
-    global red
-
     # declare needed local variables
     pin = 5
 
     while True: # run as long as program is served
         # look for state change
-        f = red_f
+        f = red_f.value
         # if frequency is non-zero light is on and blinked
         if f > 0:
             t = (1/f) / 2 # set sleep time
@@ -95,15 +92,12 @@ def control_red():
 def control_green():
     # control green lights via pin 7 from dedicated thread
 
-    # look at global state first
-    global green
-
     # declare needed local variables
     pin = 7
 
     while True: # run as long as program is served
         # look for state change
-        f = green_f
+        f = green_f.value
         # if frequency is non-zero light is on and blinked
         if f > 0:
             t = (1/f) / 2 # set sleep time
@@ -117,15 +111,12 @@ def control_green():
 def control_blue():
     # control blue lights via pin 37 from dedicated thread
 
-    # look at global state first
-    global blue
-
     # declare needed local variables
     pin = 37
 
     while True: # run as long as program is served
         # look for state change
-        f = blue_f
+        f = blue_f.value
         # if frequency is non-zero light is on and blinked
         if f > 0:
             t = (1/f) / 2 # set sleep time
@@ -139,15 +130,12 @@ def control_blue():
 def control_white():
     # control white lights via pin 35 from dedicated thread
 
-    # look at global state first
-    global white
-
     # declare needed local variables
     pin = 35
 
     while True: # run as long as program is served
         # look for state change
-        f = white_f
+        f = white_f.value
         # if frequency is non-zero light is on and blinked
         if f > 0:
             t = (1/f) / 2 # set sleep time
