@@ -66,8 +66,8 @@ def start_threads():
     blue_thread = threading.Thread(target=control_blue, daemon=True)
     blue_thread.start() # start blue thread
     # # set white thread's target function
-    # white_thread = threading.Thread(target=control_white, daemon=True)
-    # white_thread.start() # start white thread
+    white_thread = threading.Thread(target=control_white, daemon=True)
+    white_thread.start() # start white thread
 
 def control_red():
     # control red lights via pin 5 from dedicated thread
@@ -77,7 +77,7 @@ def control_red():
 
     while True: # run as long as program is served
         # look for state change
-        f = red_f.value
+        f = red['freq']
         # if frequency is non-zero light is on and blinked
         if f > 0:
             t = (1/f) / 2 # set sleep time
@@ -97,7 +97,7 @@ def control_green():
 
     while True: # run as long as program is served
         # look for state change
-        f = green_f.value
+        f = green['freq']
         # if frequency is non-zero light is on and blinked
         if f > 0:
             t = (1/f) / 2 # set sleep time
@@ -116,7 +116,7 @@ def control_blue():
 
     while True: # run as long as program is served
         # look for state change
-        f = blue_f.value
+        f = blue['freq']
         # if frequency is non-zero light is on and blinked
         if f > 0:
             t = (1/f) / 2 # set sleep time
@@ -184,28 +184,28 @@ def process_state_update(json):
         # build dict describing change
         red = build_json(0, json['freq'])
         # update frequency ctype
-        red_f.value = red['freq']
+        #red_f.value = red['freq']
         # send change dict as json to all clients
         socketio.emit('change_of_state', (red, json['btn_tap']), broadcast=True)
     if json['color'] == 1:
         # build dict describing change
         green = build_json(1, json['freq'])
         # update frequency ctype
-        green_f.value = green['freq']
+        #green_f.value = green['freq']
         # send change dict as json to all clients
         socketio.emit('change_of_state', (green, json['btn_tap']), broadcast=True)
     if json['color'] == 2:
         # build dict describing change
         blue = build_json(2, json['freq'])
         # update frequency ctype
-        blue_f.value = blue['freq']
+        #blue_f.value = blue['freq']
         # send change dict as json to all clients
         socketio.emit('change_of_state', (blue, json['btn_tap']), broadcast=True)
     if json['color'] == 3:
         # build dict describing change
         white = build_json(3, json['freq'])
         # update frequency ctype
-        white_f.value = white['freq']
+        #white_f.value = white['freq']
         # send change dict as json to all clients
         socketio.emit('change_of_state', (white, json['btn_tap']), broadcast=True)
 
@@ -221,18 +221,24 @@ if __name__ == '__main__':
     white = {'color' : 3, 'state' : 0, 'freq' : 0}
 
     # declare c-type values for processes to share
-    red_f = mp.Value('i', red['freq'])
-    green_f = mp.Value('i', green['freq'])
-    blue_f = mp.Value('i', blue['freq'])
-    white_f = mp.Value('i', white['freq'])
+    # red_f = mp.Value('i', red['freq'])
+    # green_f = mp.Value('i', green['freq'])
+    # blue_f = mp.Value('i', blue['freq'])
+    # white_f = mp.Value('i', white['freq'])
 
-
+    # # start threads
+    # set red thread's target function
+    red_thread = threading.Thread(target=control_red, daemon=True)
+    red_thread.start() # start red thread
+    # set green thread's target function
+    green_thread = threading.Thread(target=control_green, daemon=True)
+    green_thread.start() # start green thread
+    # set blue thread's target function
+    blue_thread = threading.Thread(target=control_blue, daemon=True)
+    blue_thread.start() # start blue thread
+    # # set white thread's target function
     white_thread = threading.Thread(target=control_white, daemon=True)
     white_thread.start() # start white thread
-    # # start thread control process
-    # threading_process = mp.Process(target=start_threads) # target process
-    # threading_process.daemon = True
-    # threading_process.start()
 
     # get ip address and serve app
     ip = get_ip_address()
