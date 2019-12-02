@@ -64,20 +64,15 @@ def control_red():
     while True: # run as long as program is served
         # look for state change
         f = red['freq']
-        b = red['state']
-        # if state is on and frequency is blinked
-        if 0 < f < 30:
+        # if frequency is non-zero light is on and blinked
+        if f > 0:
             t = (1/f) / 2 # set sleep time
             GPIO.output(pin, 1) # turn on
             time.sleep(t) # hold on
             GPIO.output(pin, 0) # turn off
             time.sleep(t) # hold off
-        # if frequency is solid on but pin is low
-        elif GPIO.input(pin) == 0 and f == 30:
-            GPIO.output(pin, 1) # turn on
-        # if state is off but pin is high
-        elif GPIO.input(pin) == 1 and b == 0:
-            GPIO.output(pin, 0) # turn off
+        else: # frequency is zero, light should be off
+            GPIO.output(pin, 0) # ensure off
 
 
 def control_green():
@@ -92,20 +87,15 @@ def control_green():
     while True: # run as long as program is served
         # look for state change
         f = green['freq']
-        b = green['state']
-        # if state is on and frequency is blinked
-        if 0 < f < 30:
+        # if frequency is non-zero light is on and blinked
+        if f > 0:
             t = (1/f) / 2 # set sleep time
             GPIO.output(pin, 1) # turn on
             time.sleep(t) # hold on
             GPIO.output(pin, 0) # turn off
             time.sleep(t) # hold off
-        # if frequency is solid on but pin is low
-        elif GPIO.input(pin) == 0 and f == 30:
-            GPIO.output(pin, 1) # turn on
-        # if state is off but pin is high
-        elif GPIO.input(pin) == 1 and b == 0:
-            GPIO.output(pin, 0) # turn off
+        else: # frequency is zero, light should be off
+            GPIO.output(pin, 0) # ensure off
 
 def control_blue():
     # control blue lights via pin 37 from dedicated thread
@@ -119,24 +109,38 @@ def control_blue():
     while True: # run as long as program is served
         # look for state change
         f = blue['freq']
-        b = blue['state']
-        # if state is on and frequency is blinked
-        if 0 < f < 30:
+        # if frequency is non-zero light is on and blinked
+        if f > 0:
             t = (1/f) / 2 # set sleep time
             GPIO.output(pin, 1) # turn on
             time.sleep(t) # hold on
             GPIO.output(pin, 0) # turn off
             time.sleep(t) # hold off
-        # if frequency is solid on but pin is low
-        elif GPIO.input(pin) == 0 and f == 30:
-            GPIO.output(pin, 1) # turn on
-        # if state is off but pin is high
-        elif GPIO.input(pin) == 1 and b == 0:
-            GPIO.output(pin, 0) # turn off
+        else: # frequency is zero, light should be off
+            GPIO.output(pin, 0) # ensure off
 
 def control_white():
     # control white lights via pin 35 from dedicated thread
-    pass
+
+    # look at global state first
+    global white
+
+    # declare needed local variables
+    pin = 35
+
+    while True: # run as long as program is served
+        # look for state change
+        f = white['freq']
+        # if frequency is non-zero light is on and blinked
+        if f > 0:
+            t = (1/f) / 2 # set sleep time
+            GPIO.output(pin, 1) # turn on
+            time.sleep(t) # hold on
+            GPIO.output(pin, 0) # turn off
+            time.sleep(t) # hold off
+        else: # frequency is zero, light should be off
+            GPIO.output(pin, 0) # ensure off
+
 
 @app.route('/')
 def serve_up_landing_page():
