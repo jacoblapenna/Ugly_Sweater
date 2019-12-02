@@ -57,16 +57,16 @@ def start_threads():
     # starts threads in a seperate process
 
     # set red thread's target function
-    red_thread = threading.Thread(target=control_red)
+    red_thread = threading.Thread(target=control_red, daemon=True)
     red_thread.start() # start red thread
     # set green thread's target function
-    green_thread = threading.Thread(target=control_green)
+    green_thread = threading.Thread(target=control_green, daemon=True)
     green_thread.start() # start green thread
     # set blue thread's target function
-    blue_thread = threading.Thread(target=control_blue)
+    blue_thread = threading.Thread(target=control_blue, daemon=True)
     blue_thread.start() # start blue thread
     # set white thread's target function
-    white_thread = threading.Thread(target=control_white)
+    white_thread = threading.Thread(target=control_white, daemon=True)
     white_thread.start() # start white thread
 
 def control_red():
