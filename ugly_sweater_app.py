@@ -65,9 +65,9 @@ def start_threads():
     # set blue thread's target function
     blue_thread = threading.Thread(target=control_blue, daemon=True)
     blue_thread.start() # start blue thread
-    # set white thread's target function
-    white_thread = threading.Thread(target=control_white, daemon=True)
-    white_thread.start() # start white thread
+    # # set white thread's target function
+    # white_thread = threading.Thread(target=control_white, daemon=True)
+    # white_thread.start() # start white thread
 
 def control_red():
     # control red lights via pin 5 from dedicated thread
@@ -130,12 +130,14 @@ def control_blue():
 def control_white():
     # control white lights via pin 35 from dedicated thread
 
+    global white
+
     # declare needed local variables
     pin = 35
 
     while True: # run as long as program is served
         # look for state change
-        f = white_f.value
+        f = white['freq']
         # if frequency is non-zero light is on and blinked
         if f > 0:
             t = (1/f) / 2 # set sleep time
@@ -224,10 +226,13 @@ if __name__ == '__main__':
     blue_f = mp.Value('i', blue['freq'])
     white_f = mp.Value('i', white['freq'])
 
-    # start thread control process
-    threading_process = mp.Process(target=start_threads) # target process
-    threading_process.daemon = True
-    threading_process.start()
+
+    white_thread = threading.Thread(target=control_white, daemon=True)
+    white_thread.start() # start white thread
+    # # start thread control process
+    # threading_process = mp.Process(target=start_threads) # target process
+    # threading_process.daemon = True
+    # threading_process.start()
 
     # get ip address and serve app
     ip = get_ip_address()
