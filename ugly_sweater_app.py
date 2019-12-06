@@ -97,7 +97,6 @@ def control_green():
     while True: # run as long as program is served
         # look for state change
         f = green['freq']
-        print(f)
         # if frequency is non-zero light is on and blinked
         if f > 0:
             t = (1/f) / 2 # set sleep time
