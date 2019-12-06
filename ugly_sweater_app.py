@@ -23,6 +23,8 @@ import multiprocessing as mp
 from flask_socketio import SocketIO
 from flask import Flask, request, render_template, url_for
 
+from timeit import timeit # debug
+
 app = Flask(__name__)
 socketio = SocketIO(app)
 
@@ -79,11 +81,13 @@ def control_red():
         f = red['freq']
         # if frequency is non-zero light is on and blinked
         if f > 0:
-            t = (1/f) / 2 # set sleep time
-            GPIO.output(5, 1) # turn on
-            time.sleep(1) # hold on
-            GPIO.output(5, 0) # turn off
-            time.sleep(1) # hold off
+            full_loop_time = timeit("t = (1/f) / 2; GPIO.output(5, 1); time.sleep(t); GPIO.output(5, 0); time.sleep(t)", number=1)
+            print(full_loop_time)
+            # t = (1/f) / 2 # set sleep time
+            # GPIO.output(5, 1) # turn on
+            # time.sleep(t) # hold on
+            # GPIO.output(5, 0) # turn off
+            # time.sleep(t) # hold off
         else: # frequency is zero, light should be off
             GPIO.output(pin, 0) # ensure off
 
@@ -99,11 +103,11 @@ def control_green():
         f = green['freq']
         # if frequency is non-zero light is on and blinked
         if f > 0:
-            t = (1/f) / 2 # set sleep time
-            GPIO.output(pin, 1) # turn on
-            time.sleep(t) # hold on
-            GPIO.output(pin, 0) # turn off
-            time.sleep(t) # hold off
+            print("set t:", timeit("t = (1/f) / 2", number=1)) # set sleep time
+            print("turn on green:", timeit("GPIO.output(pin, 1)", number=1)) # turn on
+            print("sleep on:", timeit("time.sleep(t)", number=1)) # hold on
+            print("turn off", timeit("GPIO.output(pin, 0)", number=1)) # turn off
+            print("sleep off:", timeit("time.sleep(t)", number=1)) # hold off
         else: # frequency is zero, light should be off
             GPIO.output(pin, 0) # ensure off
 
