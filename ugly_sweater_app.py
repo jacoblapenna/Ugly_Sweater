@@ -81,13 +81,11 @@ def control_red():
         f = red['freq']
         # if frequency is non-zero light is on and blinked
         if f > 0:
-            full_loop_time = timeit(f"t = (1/{f}) / 2; {GPIO}.output(5, 1); time.sleep(t); {GPIO}.output(5, 0); time.sleep(t)", number=1)
-            print(full_loop_time)
-            # t = (1/f) / 2 # set sleep time
-            # GPIO.output(5, 1) # turn on
-            # time.sleep(t) # hold on
-            # GPIO.output(5, 0) # turn off
-            # time.sleep(t) # hold off
+            t = (1/f) / 2 # set sleep time
+            GPIO.output(5, 1) # turn on
+            time.sleep(t) # hold on
+            GPIO.output(5, 0) # turn off
+            time.sleep(t) # hold off
         else: # frequency is zero, light should be off
             GPIO.output(pin, 0) # ensure off
 
@@ -104,9 +102,9 @@ def control_green():
         # if frequency is non-zero light is on and blinked
         if f > 0:
             t = (1/f) / 2 # set sleep time
-            print("turn on green:", timeit(f"{GPIO}.output(pin, 1)", number=1)) # turn on
+            GPIO.output(pin, 1) # turn on
             print("sleep on:", timeit(f"time.sleep({t})", number=1)) # hold on
-            print("turn off", timeit(f"{GPIO}.output(pin, 0)", number=1)) # turn off
+            GPIO.output(pin, 0) # turn off
             print("sleep off:", timeit(f"time.sleep({t})", number=1)) # hold off
         else: # frequency is zero, light should be off
             GPIO.output(pin, 0) # ensure off
