@@ -52,7 +52,8 @@ class led():
         while True:
             f_ = self.frequency
             state_ = self.get_pin_state()
-            if f_ > 0 and state_ == 0:
+            print(state_)
+            if f_ > 0 and state_:
                 self.turn_on()
             elif f_ == 0 and state_ == 1:
                 self.turn_off()
