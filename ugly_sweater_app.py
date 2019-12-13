@@ -118,24 +118,24 @@ def get_ip_address():
 #     white_thread = threading.Thread(target=control_white, daemon=True)
 #     white_thread.start() # start white thread
 
-def control_red():
-    # control red lights via pin 5 from dedicated thread
-
-    # declare needed local variables
-    pin = 5
-
-    while True: # run as long as program is served
-        # look for state change
-        f = red['freq']
-        # if frequency is non-zero light is on and blinked
-        if f > 0:
-            t = (1/f) / 2 # set sleep time
-            GPIO.output(5, 1) # turn on
-            time.sleep(t) # hold on
-            GPIO.output(5, 0) # turn off
-            time.sleep(t) # hold off
-        else: # frequency is zero, light should be off
-            GPIO.output(pin, 0) # ensure off
+# def control_red():
+#     # control red lights via pin 5 from dedicated thread
+#
+#     # declare needed local variables
+#     pin = 5
+#
+#     while True: # run as long as program is served
+#         # look for state change
+#         f = red['freq']
+#         # if frequency is non-zero light is on and blinked
+#         if f > 0:
+#             t = (1/f) / 2 # set sleep time
+#             GPIO.output(5, 1) # turn on
+#             time.sleep(t) # hold on
+#             GPIO.output(5, 0) # turn off
+#             time.sleep(t) # hold off
+#         else: # frequency is zero, light should be off
+#             GPIO.output(pin, 0) # ensure off
 
 #
 # def control_green():
@@ -265,7 +265,10 @@ if __name__ == '__main__':
     white = led(3, 0, 0, 35)
 
     # start threads
-    #start_threads()
+    red.start_run_thread()
+    green.start_run_thread()
+    blue.start_run_thread()
+    white.start_run_thread()
 
     # get ip address and serve app
     ip = get_ip_address()
