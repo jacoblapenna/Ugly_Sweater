@@ -169,10 +169,10 @@ if __name__ == '__main__':
     white = led(3, 0, 0, 35)
 
     # start threads
-    #red.start_run_thread()
-    #green.start_run_thread()
-    #blue.start_run_thread()
-    #white.start_run_thread()
+    red.start_run_thread()
+    green.start_run_thread()
+    blue.start_run_thread()
+    white.start_run_thread()
 
     # get ip address and serve app
     ip = get_ip_address()
@@ -181,6 +181,6 @@ if __name__ == '__main__':
                  host='0.0.0.0',
                  port=80,
                  use_reloader=True,
-                 debug=True,
+                 debug=False,
                  extra_files=['templates/index.html',
                               'templates/landing.html'])
