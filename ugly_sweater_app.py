@@ -135,7 +135,7 @@ def process_state_update(json):
 
     if json['color'] == 1: # if green changed
         # set green frequency
-        green.frequency = json['freq']
+        green.frequency = int(json['freq'])
         # send change dict as json to all clients
         socketio.emit('change_of_state',
                         (green.get_state_json(), json['btn_tap']),
@@ -143,7 +143,7 @@ def process_state_update(json):
 
     if json['color'] == 2: # if blue changed
         # set blue frequency
-        blue.frequency = json['freq']
+        blue.frequency = int(json['freq'])
         # send change dict as json to all clients
         socketio.emit('change_of_state',
                         (blue.get_state_json(), json['btn_tap']),
@@ -151,7 +151,7 @@ def process_state_update(json):
 
     if json['color'] == 3: # if white changed
         # set white frequency
-        white.frequency = json['freq']
+        white.frequency = int(json['freq'])
         # send change dict as json to all clients
         socketio.emit('change_of_state',
                         (white.get_state_json(), json['btn_tap']),
