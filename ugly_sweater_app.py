@@ -44,14 +44,10 @@ class led():
         # turn pin off
         GPIO.output(self.pin, 0)
 
-    def get_pin_state(self):
-        # get pin's state
-        return GPIO.input(self.pin)
-
     def run(self, sleep_=time.sleep):
         while True:
             f_ = self.frequency
-            state_ = self.get_pin_state()
+            state_ = GPIO.input(self.pin)
             if f_ > 0 and state_:
                 self.turn_on()
             elif f_ == 0 and state_ == 1:
