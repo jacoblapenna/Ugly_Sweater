@@ -50,16 +50,14 @@ class led():
     def turn_off(self):
         GPIO.output(self.pin, 0)
 
-    def run(self, sleep_=time.sleep,
-                  on_=GPIO.output(self.pin, 1),
-                  off_=GPIO.output(self.pin, 0)):
+    def run(self, sleep_=time.sleep):
         while True:
             f_ = self.frequency
             if f_:
                 t_ = (1 / f_) / 2
-                on_
+                self.turn_on()
                 sleep_(t_)
-                off_
+                self.turn_off()
                 sleep_(t_)
             else:
                 self.turn_off() # consider adding test and pass
