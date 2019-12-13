@@ -102,102 +102,6 @@ def get_ip_address():
 	    s.close()
     return ip_address
 
-# def start_threads():
-#     # starts threads in a seperate process
-#
-#     # set red thread's target function
-#     red_thread = threading.Thread(target=control_red, daemon=True)
-#     red_thread.start() # start red thread
-#     # set green thread's target function
-#     green_thread = threading.Thread(target=control_green, daemon=True)
-#     green_thread.start() # start green thread
-#     # set blue thread's target function
-#     blue_thread = threading.Thread(target=control_blue, daemon=True)
-#     blue_thread.start() # start blue thread
-#     # # set white thread's target function
-#     white_thread = threading.Thread(target=control_white, daemon=True)
-#     white_thread.start() # start white thread
-
-# def control_red():
-#     # control red lights via pin 5 from dedicated thread
-#
-#     # declare needed local variables
-#     pin = 5
-#
-#     while True: # run as long as program is served
-#         # look for state change
-#         f = red['freq']
-#         # if frequency is non-zero light is on and blinked
-#         if f > 0:
-#             t = (1/f) / 2 # set sleep time
-#             GPIO.output(5, 1) # turn on
-#             time.sleep(t) # hold on
-#             GPIO.output(5, 0) # turn off
-#             time.sleep(t) # hold off
-#         else: # frequency is zero, light should be off
-#             GPIO.output(pin, 0) # ensure off
-
-#
-# def control_green():
-#     # control green lights via pin 7 from dedicated thread
-#
-#     # declare needed local variables
-#     pin = 7
-#
-#     while True: # run as long as program is served
-#         # look for state change
-#         f = green['freq']
-#         # if frequency is non-zero light is on and blinked
-#         if f > 0:
-#             t = (1/f) / 2 # set sleep time
-#             print("turn on:", timeit(f"{GPIO.output(pin, 1)}", number=1)) # turn on
-#             print("sleep on:", timeit(f"time.sleep({t})", number=1)) # hold on
-#             print("turn off:", timeit(f"{GPIO.output(pin, 0)}", number=1)) # turn off
-#             print("sleep off:", timeit(f"time.sleep({t})", number=1)) # hold off
-#         else: # frequency is zero, light should be off
-#             GPIO.output(pin, 0) # ensure off
-#
-# def control_blue():
-#     # control blue lights via pin 37 from dedicated thread
-#
-#     # declare needed local variables
-#     pin = 37
-#
-#     while True: # run as long as program is served
-#         # look for state change
-#         f = blue['freq']
-#         # if frequency is non-zero light is on and blinked
-#         if f > 0:
-#             t = (1/f) / 2 # set sleep time
-#             GPIO.output(pin, 1) # turn on
-#             time.sleep(t) # hold on
-#             GPIO.output(pin, 0) # turn off
-#             time.sleep(t) # hold off
-#         else: # frequency is zero, light should be off
-#             GPIO.output(pin, 0) # ensure off
-#
-# def control_white():
-#     # control white lights via pin 35 from dedicated thread
-#
-#     global white
-#
-#     # declare needed local variables
-#     pin = 35
-#
-#     while True: # run as long as program is served
-#         # look for state change
-#         f = white['freq']
-#         # if frequency is non-zero light is on and blinked
-#         if f > 0:
-#             t = (1/f) / 2 # set sleep time
-#             GPIO.output(pin, 1) # turn on
-#             time.sleep(t) # hold on
-#             GPIO.output(pin, 0) # turn off
-#             time.sleep(t) # hold off
-#         else: # frequency is zero, light should be off
-#             GPIO.output(pin, 0) # ensure off
-
-
 @app.route('/')
 def serve_up_landing_page():
     # serve the landing page as root
@@ -223,7 +127,7 @@ def process_state_update(json):
 
     if json['color'] == 0: # if red changed
         # set red frequency
-        red.frequency = json['freq']
+        red.frequency = int(json['freq'])
         # send json of changes to all clients
         socketio.emit('change_of_state',
                         (red.get_state_json(), json['btn_tap']),
