@@ -48,7 +48,7 @@ class led():
             f_ = self.frequency
             if f_ == 30:
                 self.turn_on()
-            else if f_:
+            elif f_:
                 t_ = (1 / f_) / 2
                 self.turn_on()
                 sleep_(t_)
