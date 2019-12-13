@@ -36,13 +36,6 @@ class led():
         self.frequency = frequency
         self.pin = pin
 
-    def sleep(self):
-        t_ = self.frequency
-        if f_:
-            return (1 / f_) / 2
-        else:
-            return None
-
     def turn_on(self):
         # consider trying on_=GPIO.output(self.pin, 1) in run function
         GPIO.output(self.pin, 1)
@@ -53,7 +46,9 @@ class led():
     def run(self, sleep_=time.sleep):
         while True:
             f_ = self.frequency
-            if f_:
+            if f_ == 30:
+                self.turn_on()
+            else if f_:
                 t_ = (1 / f_) / 2
                 self.turn_on()
                 sleep_(t_)
