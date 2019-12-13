@@ -181,6 +181,6 @@ if __name__ == '__main__':
                  host='0.0.0.0',
                  port=80,
                  use_reloader=True,
-                 debug=False,
+                 debug=True,
                  extra_files=['templates/index.html',
                               'templates/landing.html'])
