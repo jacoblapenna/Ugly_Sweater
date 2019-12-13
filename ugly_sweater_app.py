@@ -16,10 +16,10 @@ Jacob Lapenna, 10/17/2019
 """
 
 import time
-import threading
 import socket as sock
-# import RPi.GPIO as GPIO
+import RPi.GPIO as GPIO
 import multiprocessing as mp
+from threading import Thread
 from flask_socketio import SocketIO
 from flask import Flask, request, render_template, url_for
 
@@ -36,11 +36,34 @@ class led():
         self.frequency = frequency
         self.pin = pin
 
+    def sleep(self):
+        t_ = self.frequency
+        if f_:
+            return (1 / f_) / 2
+        else:
+            return None
+
     def turn_on(self):
+        # consider trying on_=GPIO.output(self.pin, 1) in run function
         GPIO.output(self.pin, 1)
 
     def turn_off(self):
-        GPIO.output(self.pin, 1)
+        GPIO.output(self.pin, 0)
+
+    def run(self, sleep_=time.sleep):
+        while True:
+            f_ = self.frequency
+            if f_:
+                t_ = (1 / f_) / 2
+                self.turn_on()
+                sleep_(t_)
+                self.turn_off()
+                sleep_(t_)
+            else:
+                self.turn_off() # consider adding test and pass
+
+    def start_run_thread(self):
+        Thread(target=self.run, daemon=True).start()
 
     def get_state_json(self):
         # if frequency was set to 0 make sure state is 0
@@ -53,16 +76,16 @@ class led():
                 'state' : self.state,
                 'freq' : self.frequency}
 
-# def set_gpio_on_startup():
-#
-#     GPIO.setmode(GPIO.BOARD) # set numbering scheme to board model
-#     GPIO.setwarnings(False) # ignore warnings
-#
-#     # set initial states and expectations
-#     GPIO.setup(5, GPIO.OUT, initial=GPIO.LOW) # red
-#     GPIO.setup(7, GPIO.OUT, initial=GPIO.LOW) # green
-#     GPIO.setup(37, GPIO.OUT, initial=GPIO.LOW) # blue
-#     GPIO.setup(35, GPIO.OUT, initial=GPIO.LOW) # white
+def set_gpio_on_startup():
+
+    GPIO.setmode(GPIO.BOARD) # set numbering scheme to board model
+    GPIO.setwarnings(False) # ignore warnings
+
+    # set initial states and expectations
+    GPIO.setup(5, GPIO.OUT, initial=GPIO.LOW) # red
+    GPIO.setup(7, GPIO.OUT, initial=GPIO.LOW) # green
+    GPIO.setup(37, GPIO.OUT, initial=GPIO.LOW) # blue
+    GPIO.setup(35, GPIO.OUT, initial=GPIO.LOW) # white
 
 def get_ip_address():
     # get the server's IP on which to serve app
@@ -94,26 +117,26 @@ def get_ip_address():
 #     # # set white thread's target function
 #     white_thread = threading.Thread(target=control_white, daemon=True)
 #     white_thread.start() # start white thread
-#
-# def control_red():
-#     # control red lights via pin 5 from dedicated thread
-#
-#     # declare needed local variables
-#     pin = 5
-#
-#     while True: # run as long as program is served
-#         # look for state change
-#         f = red['freq']
-#         # if frequency is non-zero light is on and blinked
-#         if f > 0:
-#             t = (1/f) / 2 # set sleep time
-#             GPIO.output(5, 1) # turn on
-#             time.sleep(t) # hold on
-#             GPIO.output(5, 0) # turn off
-#             time.sleep(t) # hold off
-#         else: # frequency is zero, light should be off
-#             GPIO.output(pin, 0) # ensure off
-#
+
+def control_red():
+    # control red lights via pin 5 from dedicated thread
+
+    # declare needed local variables
+    pin = 5
+
+    while True: # run as long as program is served
+        # look for state change
+        f = red['freq']
+        # if frequency is non-zero light is on and blinked
+        if f > 0:
+            t = (1/f) / 2 # set sleep time
+            GPIO.output(5, 1) # turn on
+            time.sleep(t) # hold on
+            GPIO.output(5, 0) # turn off
+            time.sleep(t) # hold off
+        else: # frequency is zero, light should be off
+            GPIO.output(pin, 0) # ensure off
+
 #
 # def control_green():
 #     # control green lights via pin 7 from dedicated thread
@@ -233,7 +256,7 @@ def process_state_update(json):
 if __name__ == '__main__':
 
     # set GPIO initial state on startup
-    # set_gpio_on_startup()
+    set_gpio_on_startup()
 
     # set light states on server startup
     red = led(0, 0, 0, 5)
@@ -241,25 +264,8 @@ if __name__ == '__main__':
     blue = led(2, 0, 0, 37)
     white = led(3, 0, 0, 35)
 
-    # declare c-type values for processes to share
-    # red_f = mp.Value('i', red['freq'])
-    # green_f = mp.Value('i', green['freq'])
-    # blue_f = mp.Value('i', blue['freq'])
-    # white_f = mp.Value('i', white['freq'])
-
-    # # start threads
-    # # set red thread's target function
-    # red_thread = threading.Thread(target=control_red, daemon=True)
-    # red_thread.start() # start red thread
-    # # set green thread's target function
-    # green_thread = threading.Thread(target=control_green, daemon=True)
-    # green_thread.start() # start green thread
-    # # set blue thread's target function
-    # blue_thread = threading.Thread(target=control_blue, daemon=True)
-    # blue_thread.start() # start blue thread
-    # # # set white thread's target function
-    # white_thread = threading.Thread(target=control_white, daemon=True)
-    # white_thread.start() # start white thread
+    # start threads
+    #start_threads()
 
     # get ip address and serve app
     ip = get_ip_address()
