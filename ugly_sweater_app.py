@@ -48,7 +48,7 @@ class led():
         while True:
             f_ = self.frequency
             state_ = GPIO.input(self.pin)
-            if f_ > 0 and state_:
+            if f_ > 0 and state_ == 0:
                 self.turn_on()
             elif f_ == 0 and state_ == 1:
                 self.turn_off()
