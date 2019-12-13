@@ -54,7 +54,7 @@ class led():
             state_ = self.get_pin_state()
             if f_ > 0 and state_ == 0:
                 self.turn_on()
-            elif f_ == 0 and state == 1:
+            elif f_ == 0 and state_ == 1:
                 self.turn_off()
             else:
                 pass
