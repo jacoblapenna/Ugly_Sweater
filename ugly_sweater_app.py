@@ -178,8 +178,8 @@ if __name__ == '__main__':
     ip = get_ip_address()
     print("Attempting to serve page on %s:%d" % (ip, 31337))
     socketio.run(app,
-                 host=ip,
-                 port=31337,
+                 host='0.0.0.0',
+                 port=80,
                  use_reloader=True,
                  debug=False,
                  extra_files=['templates/index.html',
