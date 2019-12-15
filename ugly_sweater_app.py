@@ -49,7 +49,7 @@ class led():
             f_ = self.frequency
             state_ = GPIO.input(self.pin)
             if f_ == 30 and state_ == 0:
-                turn_on()
+                self.turn_on()
             elif f_ == 30 and state_ == 1:
                 pass
             elif f_:
