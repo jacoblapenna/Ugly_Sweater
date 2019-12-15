@@ -47,21 +47,14 @@ class led():
     def run(self, sleep_=time.sleep):
         while True:
             f_ = self.frequency
-            state_ = GPIO.input(self.pin)
-            if f_ == 30 and state_ == 0:
-                self.turn_on()
-            elif f_ == 30 and state_ == 1:
-                pass
-            elif f_:
+            if f_:
                 t_ = (1 / f_) / 2
                 self.turn_on()
                 sleep_(t_)
                 self.turn_off()
                 sleep_(t_)
-            elif f_ == 0 and state_ == 1:
+            else:
                 self.turn_off()
-            elif f_ == 0 and state_ == 0:
-                pass
 
     def start_run_thread(self):
         Thread(target=self.run, daemon=True).start()
