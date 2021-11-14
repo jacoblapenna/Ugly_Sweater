@@ -1,3 +1,4 @@
+
 """
 this program is the workhorse for controlling GPIO on a raspberry pi
 via a flask web app, the pi turns on and off lights attached to a
@@ -173,7 +174,7 @@ if __name__ == '__main__':
     print("Attempting to serve page on %s:%d" % (ip, 31337))
     socketio.run(app,
                  host='0.0.0.0',
-                 port=80,
+                 port=8080,
                  use_reloader=True,
                  debug=False,
                  extra_files=['templates/index.html',
